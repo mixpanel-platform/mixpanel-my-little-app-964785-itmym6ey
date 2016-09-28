@@ -121,12 +121,13 @@
           to_date: params.to_date
         })
         .filter(function(e) {
-          return e.name === 'Launch' || e.name === 'transactions' || e.name === 'First Launch';
+          return e.name === 'Launch' || e.name === 'transactions' || e.name === 'First Launch' || e.name === 'PushRegisterSucceeded';
         })
         .groupByUser([unitToFunction[params.unit]], function(state, events) {
           state = state || {
             dau: 0,
             first_launch: 0,
+            push_acceptance: 0,
             transactions: 0,
             launch: 0,
             unique_trans: 0,
@@ -137,6 +138,8 @@
           _.each(events, function(e) {
             if (e.name === 'First Launch') {
               state.first_launch += 1;
+            } else if (e.name === "PushRegisterSucceeded"){
+              state.push_acceptance +=1;
             } else if (e.name === 'Launch') {
               state.launch += 1;
               state.dau = 1;
@@ -188,6 +191,7 @@
           _.each(_.keys(obj), function(date) {
             result[date] = {};
             result[date]['1. ' + unitLabel] = obj[date].dau;
+            result[date]['2. Total Push Acceptances'] = obj[date].push_acceptance;
             result[date]['3. Total First Launches'] = obj[date].first_launch;
             result[date]['4. Total Transactions'] = obj[date].transactions;
             result[date]['5. Total Sessions'] = obj[date].launch;
