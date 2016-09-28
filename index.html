@@ -121,7 +121,7 @@
           to_date: params.to_date
         })
         .filter(function(e) {
-          return e.name === 'Launch' || e.name === 'transactions' || e.name === 'First Launch' || e.name === 'PushRegisterSucceeded';
+          return e.name === 'Launch' || e.name === 'transactions' || e.name === 'First Launch' || e.name === 'Put PushToken';
         })
         .groupByUser([unitToFunction[params.unit]], function(state, events) {
           state = state || {
@@ -138,7 +138,7 @@
           _.each(events, function(e) {
             if (e.name === 'First Launch') {
               state.first_launch += 1;
-            } else if (e.name === "PushRegisterSucceeded"){
+            } else if (e.name === "Put PushToken"){
               state.push_acceptance +=1;
             } else if (e.name === 'Launch') {
               state.launch += 1;
